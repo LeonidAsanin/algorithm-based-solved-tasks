@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Algorithm-based solved tasks</title>
+</head>
+<body>
+    <header>
+        <h1>Algorithm-based solved tasks</h1>
+        Choose one of the task, enter input parameters, and get a result!
+    </header>
+    <main>
+        <form method="post">
+            <div id="task">
+                <select name="task"  onchange="javascript:this.form.submit()">
+                    <option th:each="task : ${tasks}" th:value="${task.id}" th:text="${task.name}"
+                            th:selected="${chosenTaskId} == ${task.id}">Task placeholder</option>
+                </select>
+            </div>
+            <div id="description">
+                <p th:text="${taskDescription}">Description placeholder</p>
+            </div>
+            <div id="input">
+                <b>Input parameters:</b>
+                <input type="text" name="input" th:value="${input}">
+                <input type="submit" value="Calculate" th:formaction="@{/calculate}">
+                <input type="submit" value="Import from file">
+                <input type="submit" value="Export to file">
+                <button type="button" id="openDialog">Download from DB</button>
+                <input type="submit" value="Save to DB" th:formaction="@{/save}">
+            </div>
+            <div id="downloadInput">
+                <dialog>
+                    <p>Placeholder</p>
+                    <button type="button" id="closeDialog"></button>
+                </dialog>
+                <script>
+                    var dialog = document.querySelector('dialog');
+                    document.querySelector('#openDialog').onclick = function() {
+                        dialog.show();
+                    }
+                    document.querySelector('#closeDialog').onclick = function() {
+                        dialog.close();
+                    }
+                </script>
+            </div>
+            <div id="error">
+                <span th:if="${error}" style="color:red">Input Error</span>
+            </div>
+            <div id="result">
+                <p>
+                    <b>Result:</b><br/>
+                    <span th:text="${result}">Result placeholder</span>
+                </p>
+            </div>
+        </form>
+    </main>
+    <footer>
+        <hr/>
+        <p>
+            Application was developed by Leonid Asanin.
+        </p>
+        <address>
+            Contact information:<br/>
+            Email: <a href="mailto:l.asanin@mail.ru">l.asanin@mail.ru</a><br/>
+            GitHub: <a href="https://github.com/LeonidAsanin" target="_blank">github.com/LeonidAsanin</a>
+        </address>
+    </footer>
+</body>
+</html>
