@@ -10,9 +10,9 @@
         Choose one of the task, enter input parameters, and get a result!
     </header>
     <main>
-        <form method="post">
+        <form method="post" enctype="multipart/form-data">
             <div id="task">
-                <select name="task"  onchange="javascript:this.form.submit()">
+                <select name="task" onchange="javascript:this.form.submit()">
                     <option th:each="task : ${tasks}" th:value="${task.id}" th:text="${task.name}"
                             th:selected="${chosenTaskId} == ${task.id}">Task placeholder</option>
                 </select>
@@ -24,28 +24,39 @@
                 <b>Input parameters:</b>
                 <input type="text" name="input" th:value="${input}">
                 <input type="submit" value="Calculate" th:formaction="@{/calculate}">
-                <input type="submit" value="Import from file">
-                <input type="submit" value="Export to file">
+                <button type="button" onclick="document.getElementById('file').click()">Import from file</button>
+                <input id="file" type="file" accept=".txt" onchange="javascript:this.form.submit()" style="display:none"
+                       name="file" th:formaction="@{/import}">
+                <input type="submit" value="Export to file" th:formaction="@{/export}">
                 <button type="button" id="openDialog">Download from DB</button>
                 <input type="submit" value="Save to DB" th:formaction="@{/save}">
             </div>
-            <div id="downloadInput">
-                <dialog>
+            <div id="download">
+                <dialog id="downloadDialog">
                     <p>Placeholder</p>
                     <button type="button" id="closeDialog"></button>
                 </dialog>
                 <script>
-                    var dialog = document.querySelector('dialog');
-                    document.querySelector('#openDialog').onclick = function() {
-                        dialog.show();
-                    }
-                    document.querySelector('#closeDialog').onclick = function() {
-                        dialog.close();
-                    }
+                    (function() {
+                    var updateButton = document.getElementById('openDialog');
+                    var cancelButton = document.getElementById('closeDialog');
+                    var favDialog = document.getElementById('downloadDialog');
+
+                    // Update button opens a modal dialog
+                    updateButton.addEventListener('click', function() {
+                        favDialog.showModal();
+                    });
+
+                    // Form cancel button closes the dialog box
+                    cancelButton.addEventListener('click', function() {
+                        favDialog.close();
+                    });
+
+                    })();
                 </script>
             </div>
             <div id="error">
-                <span th:if="${error}" style="color:red">Input Error</span>
+                <span th:text="${error}" style="color:red">Error placeholder</span>
             </div>
             <div id="result">
                 <p>
