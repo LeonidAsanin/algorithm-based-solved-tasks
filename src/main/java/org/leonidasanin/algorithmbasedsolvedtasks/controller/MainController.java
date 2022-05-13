@@ -105,8 +105,8 @@ public class MainController {
     public ResponseEntity<Resource> exportToFile(@RequestParam(name = "input") String input,
                                                  @RequestParam(name = "task") int taskId) throws IOException {
         var task = taskService.getTaskById(taskId);
-        var pathname = task.getName() + "_" + LocalDateTime.now() + ".txt";
-        var file = new File(pathname);
+        var filename = task.getName() + "_" + LocalDateTime.now() + ".txt";
+        var file = new File(filename);
         var printWriter = new PrintWriter(file);
         printWriter.println(taskId);
         printWriter.println(input);
@@ -118,7 +118,7 @@ public class MainController {
         file.delete();
 
         return ResponseEntity.ok()
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename=" + pathname)
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename=" + filename)
                 .contentLength(fileLength)
                 .contentType(MediaType.APPLICATION_OCTET_STREAM)
                 .body(resource);
