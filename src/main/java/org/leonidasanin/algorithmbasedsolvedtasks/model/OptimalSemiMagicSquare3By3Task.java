@@ -3,10 +3,18 @@ package org.leonidasanin.algorithmbasedsolvedtasks.model;
 import org.leonidasanin.algorithmbasedsolvedtasks.exception.TaskException;
 import org.springframework.stereotype.Component;
 
-import java.util.HashSet;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Component
 public class OptimalSemiMagicSquare3By3Task extends Task {
+    private static final List<List<Integer>> SEMI_MAGIC_SQUARES = new ArrayList<>();
+
+    static {
+        LinkedList<Integer> digits = new LinkedList<>();
+        computeSemiMagicSquares(digits);
+    }
+
     {
         setId(1);
         setName("Optimal (Semi)Magic Square 3 By 3");
@@ -22,22 +30,68 @@ public class OptimalSemiMagicSquare3By3Task extends Task {
                 7 8 9 <br><br>
 
                 Turns into <br>
-                4 3 8 <br>
-                2 7 6 <br>
-                9 5 1 <br><br>
+                2 4 9 <br>
+                7 3 5 <br>
+                6 8 1 <br><br>
 
-                at a cost equal to 26. <br><br>
+                at a cost equal to 24. <br><br>
                 
-                Enter the input as a sequence of x11, x12, x13, x21, ... , x32, x33""");
+                Enter the input as a sequence of x<sub>11</sub>, x<sub>12</sub>, x<sub>13</sub>, x<sub>21</sub>, ... ,\s
+                x<sub>32</sub>, x<sub>33</sub>""");
         setInputExample("1 2 3 4 5 6 7 8 9");
+    }
+
+    private static void computeSemiMagicSquares(LinkedList<Integer> digits) {
+        if (digits.size() == 9
+                && digits.get(0) + digits.get(1) + digits.get(2) == 15
+                && digits.get(3) + digits.get(4) + digits.get(5) == 15
+                && digits.get(6) + digits.get(7) + digits.get(8) == 15
+                && digits.get(0) + digits.get(3) + digits.get(6) == 15
+                && digits.get(1) + digits.get(4) + digits.get(7) == 15
+                && digits.get(2) + digits.get(5) + digits.get(8) == 15
+        ) {
+            SEMI_MAGIC_SQUARES.add((List<Integer>) digits.clone());
+            return;
+        }
+        for (int i = 1; i < 10; i++) {
+            if (!digits.contains(i)) {
+                digits.addLast(i);
+                computeSemiMagicSquares(digits);
+                digits.removeLast();
+            }
+        }
     }
 
     @Override
     public String solve(String input) throws TaskException {
         super.solve(input); // check of the input for being correct
 
-        //TODO: implement solve() method of the OptimalSemiMagicSquare3By3Task class
-        return "result2 with input " + input;
+        var inputDigitStrings = input.split(" ");
+        var initialSquare = Arrays.stream(inputDigitStrings)
+                .map(Integer::parseInt)
+                .collect(Collectors.toList());
+
+        List<Integer> optimalSemiMagicSquare = List.of();
+        var minCost = 100;
+
+        for (List<Integer> magicSquare : SEMI_MAGIC_SQUARES) {
+            var cost = 0;
+            for (int j = 0; j < initialSquare.size(); j++) {
+                cost += Math.abs(initialSquare.get(j) - magicSquare.get(j));
+            }
+            if (cost < minCost) {
+                minCost = cost;
+                optimalSemiMagicSquare = magicSquare;
+            }
+        }
+
+        return optimalSemiMagicSquare.get(0) + " " + optimalSemiMagicSquare.get(1) + " "
+                                                                               + optimalSemiMagicSquare.get(2) + "<br>"
+                + optimalSemiMagicSquare.get(3) + " " + optimalSemiMagicSquare.get(4) + " "
+                                                                               + optimalSemiMagicSquare.get(5) + "<br>"
+                + optimalSemiMagicSquare.get(6) + " " + optimalSemiMagicSquare.get(7) + " "
+                                                                               + optimalSemiMagicSquare.get(8) + "<br>"
+                + "cost = " + minCost;
     }
 
     @Override
