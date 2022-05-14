@@ -19,29 +19,29 @@ public class FileHandlerService {
     }
 
     public String getInputFromFile(MultipartFile multipartFile) throws IOException {
-        String input = "";
+        String input;
 
         var reader = new BufferedReader(new InputStreamReader(multipartFile.getInputStream()));
-        reader.readLine(); // read taskId string
+        reader.readLine(); // read task name
         input = reader.readLine();
 
         return input;
     }
 
     public Task getTaskFromFileElseById(MultipartFile multipartFile, int taskId) throws TaskException {
-        int taskIdFromFile;
+        String taskNameFromFile;
 
         try {
             var reader = new BufferedReader(new InputStreamReader(multipartFile.getInputStream()));
-            taskIdFromFile = Integer.parseInt(reader.readLine());
-        } catch (IOException | NumberFormatException e) {
+            taskNameFromFile = reader.readLine();
+        } catch (IOException e) {
             throw new TaskException("Error while downloading from the file", taskService.getTaskById(taskId));
         }
 
         try {
-            return taskService.getTaskById(taskIdFromFile);
+            return taskService.getTaskByName(taskNameFromFile);
         } catch (NoSuchElementException e) {
-            throw new TaskException("There is no task with given id", taskService.getTaskById(taskId));
+            throw new TaskException("There is no task with given name", taskService.getTaskById(taskId));
         }
     }
 }

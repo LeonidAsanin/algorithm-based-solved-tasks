@@ -121,7 +121,7 @@ public class MainController {
         var filename = task.getName() + "_" + LocalDateTime.now() + ".txt";
         var file = new File(filename);
         var printWriter = new PrintWriter(file);
-        printWriter.println(taskId);
+        printWriter.println(task.getName());
         printWriter.println(input);
         printWriter.flush();
         var fileLength = file.length();

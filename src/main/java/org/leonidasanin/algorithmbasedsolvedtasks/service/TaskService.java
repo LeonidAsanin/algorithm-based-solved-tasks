@@ -38,6 +38,13 @@ public class TaskService {
                 .orElseThrow(NoSuchElementException::new);
     }
 
+    public Task getTaskByName(String name) {
+        return tasks.stream()
+                .filter(t -> t.getName().equals(name))
+                .findFirst()
+                .orElseThrow(NoSuchElementException::new);
+    }
+
     public Task getDefaultTask() {
         if (tasks.isEmpty()) {
             return EMPTY_TASK;
