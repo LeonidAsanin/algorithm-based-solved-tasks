@@ -61,7 +61,7 @@ public class MainController {
     }
 
     @PostMapping
-    public String updateTaskAndInput(@RequestParam(name = "task") int taskId,
+    public String updateTaskAndHandleTaskCalculationFromFile(@RequestParam(name = "task") int taskId,
                                      @RequestParam(name = "file", required = false) MultipartFile multipartFile,
                                      RedirectAttributes redirectAttributes) throws Exception {
         Task task;
@@ -70,9 +70,10 @@ public class MainController {
             task = taskService.getTaskById(taskId);
         } else {
             task = fileHandlerService.getTaskFromFileElseById(multipartFile, taskId);
-
             var input = fileHandlerService.getInputFromFile(multipartFile);
+            var result = task.solve(input);
             redirectAttributes.addFlashAttribute("input", input);
+            redirectAttributes.addFlashAttribute("result", result);
         }
 
         redirectAttributes.addFlashAttribute("task", task);
@@ -103,13 +104,15 @@ public class MainController {
     }
 
     @PostMapping("/download/{inputId}")
-    public String download(@PathVariable(name = "inputId") String inputId,
+    public String downloadAndCalculate(@PathVariable(name = "inputId") String inputId,
                            @RequestParam(name = "task") int taskId,
-                           RedirectAttributes redirectAttributes) {
+                           RedirectAttributes redirectAttributes) throws TaskException {
         var task = taskService.getTaskById(taskId);
         var input = taskService.getInputById(inputId);
+        var result = task.solve(input);
         redirectAttributes.addFlashAttribute("task", task);
         redirectAttributes.addFlashAttribute("input", input);
+        redirectAttributes.addFlashAttribute("result", result);
         return "redirect:/";
     }
 
