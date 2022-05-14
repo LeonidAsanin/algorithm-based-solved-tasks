@@ -36,6 +36,8 @@ needed to adapt to given SQL dialect.
 Project is building into an executable .jar file. So
 you can run it either in command prompt or your other
 favorite environment that support JVM for Java 17.
+To access a main page of the application go to 
+http://localhost:8080/ in your internet browser.
 
 ## Developer
 Application was developed by Leonid Asanin.
