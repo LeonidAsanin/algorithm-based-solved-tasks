@@ -3,6 +3,8 @@ package org.leonidasanin.algorithmbasedsolvedtasks.model;
 import org.leonidasanin.algorithmbasedsolvedtasks.exception.TaskException;
 import org.springframework.stereotype.Component;
 
+import java.util.TreeSet;
+
 @Component
 public class SortedStringArrayIntersectionTask extends Task {
     {
@@ -24,7 +26,8 @@ public class SortedStringArrayIntersectionTask extends Task {
                 
                 Beware: r must be without duplicates.<br><br>
                 
-                Enter the input as a sequence of a11, a12, ... , a1n; a21, a22, ... , a2n""");
+                Enter the input as a sequence of a11, a12, ... , a1n; a21, a22, ... , a2n <br>
+                P.S. " symbol is ignored""");
         setInputExample("arp, live, strong; lively, alive, harp, sharp, armstrong");
     }
 
@@ -32,8 +35,30 @@ public class SortedStringArrayIntersectionTask extends Task {
     public String solve(String input) throws TaskException {
         super.solve(input); // check of the input for being correct
 
-        //TODO: implement solve() method of the SortedStringArrayIntersectionTask class
-        return "result1 with input " + input;
+        var arrays = input.split(";");
+        if (arrays.length == 1) return "";
+
+        var a1 = arrays[0].split(",");
+        var a2 = arrays[1].split(",");
+        for (int i = 0; i < a1.length; i++) {
+            a1[i] = a1[i].replace("\"", "");
+            a1[i] = a1[i].trim();
+        }
+        for (int i = 0; i < a2.length; i++) {
+            a2[i] = a2[i].replace("\"", "");
+            a2[i] = a2[i].trim();
+        }
+        var resultSet = new TreeSet<String>();
+
+        for (var a1Element : a1) {
+            for (var a2Element : a2) {
+                if (a2Element.contains(a1Element)) resultSet.add(a1Element);
+            }
+        }
+
+        return resultSet.stream()
+                        .reduce((e1, e2) -> e1 + ", " + e2)
+                        .orElse("");
     }
 
     @Override
