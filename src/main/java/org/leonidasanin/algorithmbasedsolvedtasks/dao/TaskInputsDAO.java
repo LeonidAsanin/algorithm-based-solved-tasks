@@ -2,13 +2,12 @@ package org.leonidasanin.algorithmbasedsolvedtasks.dao;
 
 import org.leonidasanin.algorithmbasedsolvedtasks.model.Input;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.jdbc.core.RowMapper;
-import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
-@Repository
+@Component
 public class TaskInputsDAO {
     private final JdbcTemplate jdbcTemplate;
 
