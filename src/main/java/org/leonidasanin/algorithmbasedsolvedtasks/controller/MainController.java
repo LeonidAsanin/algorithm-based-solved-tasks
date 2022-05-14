@@ -1,6 +1,7 @@
 package org.leonidasanin.algorithmbasedsolvedtasks.controller;
 
 import org.leonidasanin.algorithmbasedsolvedtasks.model.Task;
+import org.leonidasanin.algorithmbasedsolvedtasks.service.FileHandlerService;
 import org.leonidasanin.algorithmbasedsolvedtasks.service.TaskService;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
@@ -21,9 +22,11 @@ import java.util.Objects;
 @RequestMapping("/")
 public class MainController {
     private final TaskService taskService;
+    private final FileHandlerService fileHandlerService;
 
-    public MainController(TaskService taskService) {
+    public MainController(TaskService taskService, FileHandlerService fileHandlerService) {
         this.taskService = taskService;
+        this.fileHandlerService = fileHandlerService;
     }
 
     @GetMapping
@@ -33,7 +36,7 @@ public class MainController {
                            @ModelAttribute Task task,
                            Model model) {
         var tasks = taskService.getAllTasks();
-        if (task.getId() == 0) {
+        if (task == null || task.getId() == 0) {
             task = taskService.getDefaultTask();
         }
         var chosenTaskId = task.getId();
@@ -50,28 +53,25 @@ public class MainController {
         model.addAttribute("error", error);
         model.addAttribute("result", result);
 
+        var inputs = taskService.getInputsByTaskId(chosenTaskId);
+        model.addAttribute("inputs", inputs);
+
         return "index";
     }
 
     @PostMapping
-    public String updatePage(@RequestParam(name = "task") int taskId,
-                             @RequestParam(name = "file", required = false) MultipartFile multipartFile,
-                             RedirectAttributes redirectAttributes) {
-        Task task = taskService.getDefaultTask();
+    public String updateTaskAndInput(@RequestParam(name = "task") int taskId,
+                                     @RequestParam(name = "file", required = false) MultipartFile multipartFile,
+                                     RedirectAttributes redirectAttributes) throws Exception {
+        Task task;
 
         if (multipartFile.isEmpty()) {
             task = taskService.getTaskById(taskId);
         } else {
-            try {
-                task = taskService.getTaskFromFile(multipartFile);
+            task = fileHandlerService.getTaskFromFileElseById(multipartFile, taskId);
 
-                var input = taskService.getInputFromFile(multipartFile);
-                redirectAttributes.addFlashAttribute("input", input);
-
-            } catch (Exception e) {
-                redirectAttributes.addFlashAttribute("error",
-                                                     "Error while downloading from the file");
-            }
+            var input = fileHandlerService.getInputFromFile(multipartFile);
+            redirectAttributes.addFlashAttribute("input", input);
         }
 
         redirectAttributes.addFlashAttribute("task", task);
@@ -83,8 +83,9 @@ public class MainController {
     public String calculate(@RequestParam(name = "input") String input,
                             @RequestParam(name = "task") int taskId,
                             RedirectAttributes redirectAttributes) {
-        var result = taskService.solveTaskById(taskId, input);
-
+        var task = taskService.getTaskById(taskId);
+        var result = task.solve(input);
+        redirectAttributes.addFlashAttribute("task", task);
         redirectAttributes.addFlashAttribute("input", input);
         redirectAttributes.addFlashAttribute("result", result);
 
@@ -98,7 +99,15 @@ public class MainController {
         return "redirect:/";
     }
 
-    public String download() {return "redirect:/";}
+    @PostMapping("/download/{input}")
+    public String download(@PathVariable(name = "input") String input,
+                           @RequestParam(name = "task") int taskId,
+                           RedirectAttributes redirectAttributes) {
+        var task = taskService.getTaskById(taskId);
+        redirectAttributes.addFlashAttribute("task", task);
+        redirectAttributes.addFlashAttribute("input", input);
+        return "redirect:/";
+    }
 
     @PostMapping("/export")
     @ResponseBody

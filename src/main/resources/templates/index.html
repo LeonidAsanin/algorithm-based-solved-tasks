@@ -33,8 +33,13 @@
             </div>
             <div id="download">
                 <dialog id="downloadDialog">
-                    <p>Placeholder</p>
-                    <button type="button" id="closeDialog"></button>
+                    <ul>
+                        <li th:each="input : ${inputs}">
+                            <span th:text="${input}">Input from DB placeholder</span>
+                            <input type="submit" value="Choose" th:formaction="@{/download/} + ${input}">
+                        </li>
+                    </ul>
+                    <button type="button" id="closeDialog">Close</button>
                 </dialog>
                 <script>
                     (function() {

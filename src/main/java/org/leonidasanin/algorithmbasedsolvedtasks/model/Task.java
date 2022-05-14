@@ -6,6 +6,10 @@ public class Task {
     private String description;
     private String inputExample;
 
+    public String solve(String input) {
+        throw new UnsupportedOperationException();
+    }
+
     public int getId() {
         return id;
     }
