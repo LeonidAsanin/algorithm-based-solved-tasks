@@ -38,7 +38,7 @@ public class SortedStringArrayIntersectionTask extends Task {
 
     @Override
     public boolean isInputCorrect(String input) {
-        //TODO: implement isInputCorrect() method of the SortedStringArrayIntersectionTask class
-        return input.length() != 1;
+        var arrays = input.split(";");
+        return arrays.length != 0 && arrays.length <= 2;
     }
 }
