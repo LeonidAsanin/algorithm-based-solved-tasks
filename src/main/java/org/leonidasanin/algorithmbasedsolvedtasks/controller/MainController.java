@@ -31,7 +31,7 @@ public class MainController {
     }
 
     @GetMapping
-    public String mainPage(@ModelAttribute(name = "error") String error,
+    public String getMainPage(@ModelAttribute(name = "error") String error,
                            @ModelAttribute(name = "input") String input,
                            @ModelAttribute(name = "result") String result,
                            @ModelAttribute Task task,
