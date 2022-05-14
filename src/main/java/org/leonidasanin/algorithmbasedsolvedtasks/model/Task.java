@@ -7,7 +7,7 @@ public class Task {
     private String inputExample;
 
     public String solve(String input) {
-        throw new UnsupportedOperationException();
+        return "";
     }
 
     public int getId() {

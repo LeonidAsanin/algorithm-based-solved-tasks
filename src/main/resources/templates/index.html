@@ -18,11 +18,11 @@
                 </select>
             </div>
             <div id="description">
-                <p th:text="${taskDescription}">Description placeholder</p>
+                <p th:utext="${taskDescription}">Description placeholder</p>
             </div>
             <div id="input">
                 <b>Input parameters:</b>
-                <input type="text" name="input" th:value="${input}">
+                <input type="text" name="input" th:value="${input}" style="width:750px"> <br/>
                 <input type="submit" value="Calculate" th:formaction="@{/calculate}">
                 <button type="button" onclick="document.getElementById('file').click()">Import from file</button>
                 <input id="file" type="file" accept=".txt" onchange="javascript:this.form.submit()" style="display:none"

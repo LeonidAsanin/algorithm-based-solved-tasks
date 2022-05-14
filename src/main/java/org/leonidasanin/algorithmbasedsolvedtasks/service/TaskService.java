@@ -1,5 +1,6 @@
 package org.leonidasanin.algorithmbasedsolvedtasks.service;
 
+import org.leonidasanin.algorithmbasedsolvedtasks.dao.TaskInputsDAO;
 import org.leonidasanin.algorithmbasedsolvedtasks.model.Task;
 import org.springframework.stereotype.Service;
 
@@ -8,37 +9,45 @@ import java.util.NoSuchElementException;
 
 @Service
 public class TaskService {
-    private final List<Task> tasks;
+    private static final Task EMPTY_TASK = new Task().setId(0).setName("No Tasks");
 
-    public TaskService(List<Task> tasks) {
-         this.tasks = tasks;
+    private final List<Task> tasks;
+    private final TaskInputsDAO taskInputsDAO;
+
+    public TaskService(List<Task> tasks, TaskInputsDAO taskInputsDAO) {
+        this.tasks = tasks;
+        this.taskInputsDAO = taskInputsDAO;
     }
 
     public List<Task> getAllTasks() {
+        if (tasks.isEmpty()) {
+            return List.of(EMPTY_TASK);
+        }
         return tasks;
     }
 
     public Task getTaskById(int taskId) {
-        //TODO: implement getTaskById() method of TaskService class
-        if (taskId == 1) return tasks.get(0);
-        if (taskId == 2) return tasks.get(1);
-        throw new NoSuchElementException();
+        if (taskId == 0) {
+            return EMPTY_TASK;
+        }
+        return tasks.stream()
+                .filter(t -> t.getId() == taskId)
+                .findFirst()
+                .orElseThrow(NoSuchElementException::new);
     }
 
     public Task getDefaultTask() {
-        //TODO: implement getDefaultTask() method of TaskService class
+        if (tasks.isEmpty()) {
+            return EMPTY_TASK;
+        }
         return tasks.get(0);
     }
 
     public void saveInputForTask(int taskId, String input) {
-        //TODO: implement saveInputForTask() method of TaskService class
-        System.out.println("input [" + input + "] for task with id " + taskId + " was saved");
+        taskInputsDAO.save(taskId, input);
     }
 
     public List<String> getInputsByTaskId(int taskId) {
-        //TODO: implement getInputsByTaskId() method of TaskService class
-        if (taskId == 1) return List.of("input11", "input12");
-        if (taskId == 2) return List.of("input21", "input22ew   qwqw", "input23");
-        throw new NoSuchElementException();
+        return taskInputsDAO.getInputsByTaskId(taskId);
     }
 }
