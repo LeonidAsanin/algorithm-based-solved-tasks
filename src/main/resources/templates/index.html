@@ -34,9 +34,9 @@
             <div id="download">
                 <dialog id="downloadDialog">
                     <ul>
-                        <li th:each="input : ${inputs}">
-                            <span th:text="${input}">Input from DB placeholder</span>
-                            <input type="submit" value="Choose" th:formaction="@{/download/} + ${input}">
+                        <li th:each="downloadedInput : ${downloadedInputs}">
+                            <span th:text="${downloadedInput.text}">Downloaded input placeholder</span>
+                            <input type="submit" value="Choose" th:formaction="@{/download/} + ${downloadedInput.id}">
                         </li>
                     </ul>
                     <button type="button" id="closeDialog">Close</button>

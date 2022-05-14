@@ -1,5 +1,6 @@
 package org.leonidasanin.algorithmbasedsolvedtasks.controller;
 
+import org.leonidasanin.algorithmbasedsolvedtasks.exception.TaskException;
 import org.leonidasanin.algorithmbasedsolvedtasks.model.Task;
 import org.leonidasanin.algorithmbasedsolvedtasks.service.FileHandlerService;
 import org.leonidasanin.algorithmbasedsolvedtasks.service.TaskService;
@@ -53,8 +54,8 @@ public class MainController {
         model.addAttribute("error", error);
         model.addAttribute("result", result);
 
-        var inputs = taskService.getInputsByTaskId(chosenTaskId);
-        model.addAttribute("inputs", inputs);
+        var downloadedInputs = taskService.getInputsByTaskId(chosenTaskId);
+        model.addAttribute("downloadedInputs", downloadedInputs);
 
         return "index";
     }
@@ -82,7 +83,7 @@ public class MainController {
     @PostMapping("/calculate")
     public String calculate(@RequestParam(name = "input") String input,
                             @RequestParam(name = "task") int taskId,
-                            RedirectAttributes redirectAttributes) {
+                            RedirectAttributes redirectAttributes) throws TaskException {
         var task = taskService.getTaskById(taskId);
         var result = task.solve(input);
         redirectAttributes.addFlashAttribute("task", task);
@@ -94,16 +95,19 @@ public class MainController {
 
     @PostMapping("/save")
     public String save(@RequestParam(name = "input") String input,
-                       @RequestParam(name = "task") int taskId) {
+                       @RequestParam(name = "task") int taskId,
+                       RedirectAttributes redirectAttributes) throws TaskException {
         taskService.saveInputForTask(taskId, input);
+        redirectAttributes.addFlashAttribute("task", taskService.getTaskById(taskId));
         return "redirect:/";
     }
 
-    @PostMapping("/download/{input}")
-    public String download(@PathVariable(name = "input") String input,
+    @PostMapping("/download/{inputId}")
+    public String download(@PathVariable(name = "inputId") String inputId,
                            @RequestParam(name = "task") int taskId,
                            RedirectAttributes redirectAttributes) {
         var task = taskService.getTaskById(taskId);
+        var input = taskService.getInputById(inputId);
         redirectAttributes.addFlashAttribute("task", task);
         redirectAttributes.addFlashAttribute("input", input);
         return "redirect:/";

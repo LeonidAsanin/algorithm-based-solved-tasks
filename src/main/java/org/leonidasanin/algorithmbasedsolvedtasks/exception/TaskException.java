@@ -2,13 +2,10 @@ package org.leonidasanin.algorithmbasedsolvedtasks.exception;
 
 import org.leonidasanin.algorithmbasedsolvedtasks.model.Task;
 
-public class DownloadFromFileException extends Exception {
-    private Task previousTask;
+public class TaskException extends Exception {
+    private final Task previousTask;
 
-    public DownloadFromFileException() {
-    }
-
-    public DownloadFromFileException(String message, Task previousTask) {
+    public TaskException(String message, Task previousTask) {
         super(message);
         this.previousTask = previousTask;
     }

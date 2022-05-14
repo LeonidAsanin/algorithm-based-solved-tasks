@@ -1,13 +1,20 @@
 package org.leonidasanin.algorithmbasedsolvedtasks.model;
 
+import org.leonidasanin.algorithmbasedsolvedtasks.exception.TaskException;
+
 public class Task {
     private int id;
     private String name;
     private String description;
     private String inputExample;
 
-    public String solve(String input) {
+    public String solve(String input) throws TaskException {
+        if (!isInputCorrect(input)) throw new TaskException("Incorrect Input", this);
         return "";
+    }
+
+    public boolean isInputCorrect(String input) {
+        return false;
     }
 
     public int getId() {

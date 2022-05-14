@@ -1,11 +1,13 @@
 package org.leonidasanin.algorithmbasedsolvedtasks.service;
 
 import org.leonidasanin.algorithmbasedsolvedtasks.dao.TaskInputsDAO;
+import org.leonidasanin.algorithmbasedsolvedtasks.exception.TaskException;
+import org.leonidasanin.algorithmbasedsolvedtasks.model.Input;
 import org.leonidasanin.algorithmbasedsolvedtasks.model.Task;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.NoSuchElementException;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class TaskService {
@@ -43,11 +45,27 @@ public class TaskService {
         return tasks.get(0);
     }
 
-    public void saveInputForTask(int taskId, String input) {
-        taskInputsDAO.save(taskId, input);
+    public void saveInputForTask(int taskId, String input) throws TaskException {
+        var task = getTaskById(taskId);
+        if (task.isInputCorrect(input)) {
+            taskInputsDAO.save(taskId, input);
+        } else {
+            throw new TaskException("Incorrect Input", task);
+        }
     }
 
-    public List<String> getInputsByTaskId(int taskId) {
-        return taskInputsDAO.getInputsByTaskId(taskId);
+    public List<Input> getInputsByTaskId(int taskId) {
+        var inputs = taskInputsDAO.getInputsByTaskId(taskId)
+                .stream()
+                .distinct()
+                .collect(Collectors.toList());
+        Collections.reverse(inputs);
+        return inputs.stream()
+                .limit(10)
+                .toList();
+    }
+
+    public String getInputById(String inputId) {
+        return taskInputsDAO.getInputById(inputId);
     }
 }
