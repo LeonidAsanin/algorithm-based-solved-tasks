@@ -76,7 +76,7 @@ class GetMainPageTests {
                         .get("/")
                         .flashAttr("error", error)
                 )
-                //then
+        //then
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.content().contentType("text/html;charset=UTF-8"))
                 .andExpect(MockMvcResultMatchers.view().name("index"))
@@ -142,7 +142,7 @@ class GetMainPageTests {
                         .get("/")
                         .flashAttr("result", result)
                 )
-                //then
+        //then
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.content().contentType("text/html;charset=UTF-8"))
                 .andExpect(MockMvcResultMatchers.view().name("index"))
@@ -173,7 +173,7 @@ class GetMainPageTests {
                         .get("/")
                         .flashAttr("task", task)
                 )
-                //then
+        //then
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.content().contentType("text/html;charset=UTF-8"))
                 .andExpect(MockMvcResultMatchers.view().name("index"))

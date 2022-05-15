@@ -1,6 +1,5 @@
 package org.leonidasanin.algorithmbasedsolvedtasks.controller;
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.leonidasanin.algorithmbasedsolvedtasks.exception.TaskException;
@@ -30,7 +29,7 @@ class ExceptionHandlerControllerTests {
         var result = exceptionHandler.handleIOException(exception, redirectAttributes);
 
         //then
-        Assertions.assertEquals("redirect:/", result);
+        assertEquals("redirect:/", result);
         Mockito.verify(redirectAttributes).addFlashAttribute("task", previousTask);
         Mockito.verify(redirectAttributes).addFlashAttribute("error", message);
     }
