@@ -96,7 +96,7 @@ public class OptimalSemiMagicSquare3By3Task extends Task {
 
     @Override
     public boolean isInputCorrect(String input) {
-        var inputDigitStrings = input.split(" ");
+        var inputDigitStrings = input.trim().split(" +");
         if (inputDigitStrings.length != 9) return false;
 
         var digits = new HashSet<Integer>();
