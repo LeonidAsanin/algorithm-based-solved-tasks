@@ -23,9 +23,11 @@ class OptimalSemiMagicSquare3By3TaskTests {
         Executable throwing = () -> task.solve(incorrectInput);
 
         //then
-        assertThrows(TaskException.class, throwing);
-        assertEquals("2 4 9<br>7 3 5<br>6 8 1<br>cost = 24", result1);
-        assertEquals("2 9 4<br>7 5 3<br>6 1 8<br>cost = 20", result2);
+        assertAll(
+                () -> assertThrows(TaskException.class, throwing),
+                () -> assertEquals("2 4 9<br>7 3 5<br>6 8 1<br>cost = 24", result1),
+                () -> assertEquals("2 9 4<br>7 5 3<br>6 1 8<br>cost = 20", result2)
+        );
     }
 
     @Test
@@ -49,12 +51,14 @@ class OptimalSemiMagicSquare3By3TaskTests {
         var result7 = task.isInputCorrect(incorrectInput5);
 
         //then
-        assertTrue(result1);
-        assertTrue(result2);
-        assertFalse(result3);
-        assertFalse(result4);
-        assertFalse(result5);
-        assertFalse(result6);
-        assertFalse(result7);
+        assertAll(
+                () -> assertTrue(result1),
+                () -> assertTrue(result2),
+                () -> assertFalse(result3),
+                () -> assertFalse(result4),
+                () -> assertFalse(result5),
+                () -> assertFalse(result6),
+                () -> assertFalse(result7)
+        );
     }
 }
