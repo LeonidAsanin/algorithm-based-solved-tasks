@@ -13,8 +13,8 @@ import java.util.stream.Collectors;
 public class TaskService {
     private static final Task EMPTY_TASK = new Task().setId(0).setName("No Tasks");
 
-    private final List<Task> tasks;
     private final TaskInputsDAO taskInputsDAO;
+    private List<Task> tasks;
 
     public TaskService(List<Task> tasks, TaskInputsDAO taskInputsDAO) {
         this.tasks = tasks;
@@ -52,15 +52,6 @@ public class TaskService {
         return tasks.get(0);
     }
 
-    public void saveInputForTask(int taskId, String input) throws TaskException {
-        var task = getTaskById(taskId);
-        if (task.isInputCorrect(input)) {
-            taskInputsDAO.save(taskId, input);
-        } else {
-            throw new TaskException("Incorrect Input", task);
-        }
-    }
-
     public List<Input> getInputsByTaskId(int taskId) {
         var inputs = taskInputsDAO.getInputsByTaskId(taskId)
                 .stream()
@@ -74,5 +65,18 @@ public class TaskService {
 
     public String getInputById(int inputId) {
         return taskInputsDAO.getInputById(inputId);
+    }
+
+    public void saveInputForTask(int taskId, String input) throws TaskException {
+        var task = getTaskById(taskId);
+        if (task.isInputCorrect(input)) {
+            taskInputsDAO.save(taskId, input);
+        } else {
+            throw new TaskException("Incorrect Input", task);
+        }
+    }
+
+    public void setTasks(List<Task> tasks) {
+        this.tasks = tasks;
     }
 }
