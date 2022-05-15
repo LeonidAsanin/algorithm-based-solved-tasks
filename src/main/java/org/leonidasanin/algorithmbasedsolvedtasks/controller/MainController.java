@@ -100,6 +100,7 @@ public class MainController {
                        RedirectAttributes redirectAttributes) throws TaskException {
         taskService.saveInputForTask(taskId, input);
         redirectAttributes.addFlashAttribute("task", taskService.getTaskById(taskId));
+        redirectAttributes.addFlashAttribute("input", input);
         return "redirect:/";
     }
 
