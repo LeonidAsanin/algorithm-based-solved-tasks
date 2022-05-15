@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>org.leonidasanin</groupId>
 	<artifactId>algorithm-based-solved-tasks</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0.0</version>
 	<name>Algorithm-based solved tasks</name>
 	<description>Test project for IT-Service</description>
 	<properties>
