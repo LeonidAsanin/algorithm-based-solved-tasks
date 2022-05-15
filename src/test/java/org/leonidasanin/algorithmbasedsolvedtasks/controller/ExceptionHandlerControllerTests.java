@@ -9,6 +9,8 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.io.IOException;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -18,7 +20,7 @@ class ExceptionHandlerControllerTests {
     RedirectAttributes redirectAttributes;
 
     @Test
-    void handleIOException() {
+    void handleTaskException() {
         //given
         var previousTask = new SortedStringArrayIntersectionTask();
         var message = "message";
@@ -26,11 +28,26 @@ class ExceptionHandlerControllerTests {
         var exceptionHandler = new ExceptionHandlerController();
 
         //when
-        var result = exceptionHandler.handleIOException(exception, redirectAttributes);
+        var result = exceptionHandler.handleTaskException(exception, redirectAttributes);
 
         //then
         assertEquals("redirect:/", result);
         Mockito.verify(redirectAttributes).addFlashAttribute("task", previousTask);
+        Mockito.verify(redirectAttributes).addFlashAttribute("error", message);
+    }
+
+    @Test
+    void handleIOException() {
+        //given
+        var message = "message";
+        var exception = new IOException(message);
+        var exceptionHandler = new ExceptionHandlerController();
+
+        //when
+        var result = exceptionHandler.handleIOException(exception, redirectAttributes);
+
+        //then
+        assertEquals("redirect:/", result);
         Mockito.verify(redirectAttributes).addFlashAttribute("error", message);
     }
 }

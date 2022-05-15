@@ -21,9 +21,14 @@ public class FileHandlerService {
     public String getInputFromFile(MultipartFile multipartFile) throws IOException {
         String input;
 
-        var reader = new BufferedReader(new InputStreamReader(multipartFile.getInputStream()));
-        reader.readLine(); // read task name
-        input = reader.readLine();
+        try {
+            var reader = new BufferedReader(new InputStreamReader(multipartFile.getInputStream()));
+            reader.readLine(); // read task name
+            input = reader.readLine();
+            if (input == null) return "";
+        } catch (IOException e) {
+            throw new IOException("Error while downloading input from the file");
+        }
 
         return input;
     }

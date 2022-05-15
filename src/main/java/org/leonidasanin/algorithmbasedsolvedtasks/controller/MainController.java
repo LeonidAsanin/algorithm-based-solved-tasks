@@ -63,7 +63,7 @@ public class MainController {
     @PostMapping
     public String updateTaskAndHandleTaskCalculationFromFile(@RequestParam(name = "task") int taskId,
                                      @RequestParam(name = "file", required = false) MultipartFile multipartFile,
-                                     RedirectAttributes redirectAttributes) throws Exception {
+                                     RedirectAttributes redirectAttributes) throws TaskException, IOException {
         Task task;
 
         if (multipartFile.isEmpty()) {
