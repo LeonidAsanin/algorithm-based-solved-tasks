@@ -22,7 +22,7 @@ public class TaskInputsDAO {
         return jdbcTemplate.query(sql, rowMapper);
     }
 
-    public String getInputById(String inputId) {
+    public String getInputById(int inputId) {
         var sql = "SELECT input FROM taskInputs WHERE id = " + inputId;
         RowMapper<String> rowMapper = (rs, rowNum) -> rs.getString("input");
         return jdbcTemplate.query(sql, rowMapper)

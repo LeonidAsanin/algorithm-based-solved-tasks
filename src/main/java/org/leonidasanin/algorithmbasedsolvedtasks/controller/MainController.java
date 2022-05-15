@@ -104,7 +104,7 @@ public class MainController {
     }
 
     @PostMapping("/download/{inputId}")
-    public String downloadAndCalculate(@PathVariable(name = "inputId") String inputId,
+    public String downloadAndCalculate(@PathVariable(name = "inputId") int inputId,
                            @RequestParam(name = "task") int taskId,
                            RedirectAttributes redirectAttributes) throws TaskException {
         var task = taskService.getTaskById(taskId);

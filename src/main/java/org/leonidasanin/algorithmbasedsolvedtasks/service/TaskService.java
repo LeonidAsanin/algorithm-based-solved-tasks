@@ -72,7 +72,7 @@ public class TaskService {
                 .toList();
     }
 
-    public String getInputById(String inputId) {
+    public String getInputById(int inputId) {
         return taskInputsDAO.getInputById(inputId);
     }
 }
