@@ -32,10 +32,10 @@ public class MainController {
 
     @GetMapping
     public String getMainPage(@ModelAttribute(name = "error") String error,
-                           @ModelAttribute(name = "input") String input,
-                           @ModelAttribute(name = "result") String result,
-                           @ModelAttribute Task task,
-                           Model model) {
+                              @ModelAttribute(name = "input") String input,
+                              @ModelAttribute(name = "result") String result,
+                              @ModelAttribute Task task,
+                              Model model) {
         var tasks = taskService.getAllTasks();
         if (task == null || task.getId() == 0) {
             task = taskService.getDefaultTask();
